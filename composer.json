@@ -1,0 +1,12 @@
+{
+    "name": "michielfb/data-migrations",
+    "description": "Data Migrations",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michiel",
+            "email": "hi@michiel.email"
+        }
+    ],
+    "require": {}
+}
