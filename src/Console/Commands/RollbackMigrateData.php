@@ -54,12 +54,17 @@ class RollbackMigrateData extends Command
         }
 
         // Get a path to the migration scripts
-        $path = 'database/data-migrations';
+        $path = $this->getMigrationPath();
 
         $this->migrator->rollback($path);
 
         foreach ($this->migrator->getNotes() as $note) {
             $this->output->writeln($note);
         }
+    }
+
+    protected function getMigrationPath()
+    {
+        return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'data-migrations';
     }
 }

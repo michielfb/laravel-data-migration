@@ -55,12 +55,17 @@ class MigrateData extends Command
 
         // Get a path to the migration scripts
         // @todo add this as an option to the command.
-        $path = 'database/data-migrations';
+        $path = $this->getMigrationPath();
 
         $this->migrator->run($path);
 
         foreach ($this->migrator->getNotes() as $note) {
             $this->output->writeln($note);
         }
+    }
+
+    protected function getMigrationPath()
+    {
+        return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'data-migrations';
     }
 }

@@ -15,6 +15,6 @@ class MakeMigrateData extends MigrateMakeCommand
 
     protected function getMigrationPath()
     {
-        return 'database/data-migrations';
+        return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'data-migrations';
     }
 }
