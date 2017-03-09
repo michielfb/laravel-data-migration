@@ -15,7 +15,24 @@ class DataMigrationsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->registerMigrations();
+            $this->registerFolder();
+        }
+    }
+
+    protected function registerMigrations()
+    {
+        $this->publishes([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'data-migrations');
+    }
+
+    protected function registerFolder()
+    {
+        $this->publishes([
+            __DIR__.'/../database/data-migrations' => database_path('data-migrations'),
+        ], 'data-migrations');
     }
 
     /**
