@@ -18,6 +18,7 @@ class DataMigrationsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->registerMigrations();
             $this->registerMigrationFolder();
+            $this->registerConfig();
         }
     }
 
@@ -39,7 +40,7 @@ class DataMigrationsServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../assets/config/data-migrations.php' => config_path('data-migrations.php'),
-        ]);
+        ], 'data-migrations');
     }
 
     /**
