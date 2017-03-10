@@ -19,10 +19,10 @@ composer require michielfb/data-migrations
 
 2. Publish the new assets.
 ```shell
-php artisan vendor:publish
+php artisan vendor:publish --tag=data-migrations
 ```
 
-3. Run the database migraiton
+3. Run the database migration
 ```shell
 php artisan migrate
 ```
