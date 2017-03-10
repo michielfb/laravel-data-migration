@@ -17,22 +17,29 @@ class DataMigrationsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->registerMigrations();
-            $this->registerFolder();
+            $this->registerMigrationFolder();
         }
     }
 
     protected function registerMigrations()
     {
         $this->publishes([
-            __DIR__.'/../database/migrations' => database_path('migrations'),
+            __DIR__.'/../assets/database/migrations' => database_path('migrations'),
         ], 'data-migrations');
     }
 
-    protected function registerFolder()
+    protected function registerMigrationFolder()
     {
         $this->publishes([
             __DIR__.'/../database/data-migrations' => database_path('data-migrations'),
         ], 'data-migrations');
+    }
+
+    protected function registerConfig()
+    {
+        $this->publishes([
+            __DIR__.'/../assets/config/data-migrations.php' => config_path('data-migrations.php'),
+        ]);
     }
 
     /**
