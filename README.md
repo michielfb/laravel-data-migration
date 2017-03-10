@@ -17,25 +17,14 @@ composer require michielfb/data-migrations
 \Michielfb\DataMigrations\DataMigrationsServiceProvider::class
 ```
 
-2. Add a `migrations_data` section to your config/database.php array. Add a table name. For example `data_migrations`.
-
-```php
-return [
-    ...
-    'migrations_data' => 'data_migrations',
-    ...
-];
+2. Publish the new assets.
+```shell
+php artisan vendor:publish --tag=data-migrations
 ```
 
-3. Create a new folder called `data-migrations` in your \<root>/database folder.
-
-4. Create a regular migration to add the data migrations table.
-
-```php
-Schema::create('data_migrations', function (Blueprint $table) {
-    $table->string('migration');
-    $table->integer('batch');
-});
+3. Run the database migration
+```shell
+php artisan migrate
 ```
 
 ### Usage
