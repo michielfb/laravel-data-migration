@@ -65,6 +65,6 @@ class RollbackMigrateData extends Command
 
     protected function getMigrationPath()
     {
-        return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'data-migrations';
+        return [$this->laravel->databasePath().DIRECTORY_SEPARATOR.'data-migrations'];
     }
 }
