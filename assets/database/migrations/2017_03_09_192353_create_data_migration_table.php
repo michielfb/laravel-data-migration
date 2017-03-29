@@ -13,10 +13,13 @@ class CreateDataMigrationTable extends Migration
      */
     public function up()
     {
-        Schema::create('data_migrations', function (Blueprint $table) {
-            $table->string('migration');
-            $table->integer('batch');
-        });
+        if (!Schema::hasTable('data_migrations')) {
+
+            Schema::create('data_migrations', function (Blueprint $table) {
+                $table->string('migration');
+                $table->integer('batch');
+            });
+        }
     }
 
     /**
@@ -26,6 +29,8 @@ class CreateDataMigrationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('data_migrations');
+        if (config('data-migrations.rollback_table')) {
+            Schema::dropIfExists('data_migrations');
+        }
     }
 }
