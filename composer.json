@@ -11,5 +11,12 @@
         "psr-4": {
             "Michielfb\\DataMigrations\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Michielfb\\DataMigrations\\DataMigrationsServiceProvider"
+            ]
+        }
     }
 }
