@@ -11,7 +11,7 @@ composer require michielfb/data-migrations
 
 ### Configuration
 
-1. Register the ServiceProvider in your config/app.php service provider list.
+1. For Laravel 5.4 and less: Register the ServiceProvider in your config/app.php service provider list.
 
 ```php
 \Michielfb\DataMigrations\DataMigrationsServiceProvider::class
