@@ -58,10 +58,6 @@ class MigrateData extends Command
         $path = $this->getMigrationPath();
 
         $this->migrator->run($path);
-
-        foreach ($this->migrator->getNotes() as $note) {
-            $this->output->writeln($note);
-        }
     }
 
     protected function getMigrationPath()
