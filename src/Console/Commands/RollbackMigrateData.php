@@ -57,10 +57,6 @@ class RollbackMigrateData extends Command
         $path = $this->getMigrationPath();
 
         $this->migrator->rollback($path);
-
-        foreach ($this->migrator->getNotes() as $note) {
-            $this->output->writeln($note);
-        }
     }
 
     protected function getMigrationPath()
