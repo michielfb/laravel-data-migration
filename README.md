@@ -4,26 +4,9 @@ This package allows to migrate data the same way as regular database structure m
 
 ### Installation
 
-**Composer**
 ```shell
 composer require michielfb/data-migrations
-```
-
-### Configuration
-
-1. Register the ServiceProvider in your config/app.php service provider list. This step can be skipped in Laravel 5.5+
-
-```php
-\Michielfb\DataMigrations\DataMigrationsServiceProvider::class
-```
-
-2. Publish the new assets.
-```shell
 php artisan vendor:publish --tag=data-migrations
-```
-
-3. Run the database migration
-```shell
 php artisan migrate
 ```
 
@@ -36,4 +19,3 @@ The following artisan commands are available.
 `migrate:data` runs the data migration
 
 `migrate:rollback-data` rolls back the migration.
-

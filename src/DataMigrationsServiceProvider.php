@@ -4,6 +4,9 @@ namespace Michielfb\DataMigrations;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Migrations\Migrator;
+use Michielfb\DataMigrations\Console\Commands\MakeDataMigrationCommand;
+use Michielfb\DataMigrations\Console\Commands\MigrateDataCommand;
+use Michielfb\DataMigrations\Console\Commands\RollbackMigrateDataCommand;
 use Michielfb\DataMigrations\Repositories\DataMigrationRepository;
 
 class DataMigrationsServiceProvider extends ServiceProvider
@@ -16,69 +19,73 @@ class DataMigrationsServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->registerMigrations();
-            $this->registerMigrationFolder();
+            $this->registerBinds();
+            $this->registerMigrationDirectory();
             $this->registerConfig();
+            $this->registerArtisanCommands();
         }
     }
 
-    protected function registerMigrations()
+    /**
+     * Register binds.
+     *
+     * @return void
+     */
+    private function registerBinds(): void
     {
-        $this->publishes([
-            __DIR__.'/../assets/database/migrations' => database_path('migrations'),
-        ], 'data-migrations');
+        $this->app->singleton(MakeDataMigrationCommand::class, function ($app) {
+            return new MakeDataMigrationCommand(
+                $app['migration.creator'],
+                $app['composer']
+             );
+        });
+
+        $this->app->singleton('migration.data.repository', function ($app) {
+            return new DataMigrationRepository(
+                $app['db'],
+                $app['config']['data-migrations']['migrations_data']
+            );
+        });
+
+        $this->app->singleton(DataMigrator::class, function($app) {
+            return new DataMigrator(
+                $app['migration.data.repository'],
+                $app['db'],
+                $app['files']
+            );
+        });
     }
 
-    protected function registerMigrationFolder()
+    /**
+     * Register data migrations directory.
+     *
+     * @return void
+     */
+    private function registerMigrationDirectory(): void
     {
         $this->publishes([
             __DIR__.'/../assets/data-migrations' => database_path('data-migrations'),
         ], 'data-migrations');
     }
 
-    protected function registerConfig()
+    /**
+     * Register configuration file.
+     *
+     * @return void
+     */
+    private function registerConfig(): void
     {
         $this->publishes([
             __DIR__.'/../assets/config/data-migrations.php' => config_path('data-migrations.php'),
         ], 'data-migrations');
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->registerRepository();
-        $this->registerMigrator();
-        $this->registerArtisanCommands();
-    }
-
-    protected function registerRepository()
-    {
-        $this->app->singleton('migration.data.repository', function ($app) {
-            $table = $app['config']['data-migrations']['migrations_data'];
-
-            return new DataMigrationRepository($app['db'], $table);
-        });
-    }
-
-    protected function registerMigrator()
-    {
-        $this->app->singleton('migrator.data', function($app) {
-            $repository = $app['migration.data.repository'];
-
-            return new Migrator($repository, $app['db'], $app['files']);
-        });
-    }
-
-    protected function registerArtisanCommands()
+    private function registerArtisanCommands(): void
     {
         $this->commands([
-            \Michielfb\DataMigrations\Console\Commands\MakeMigrateData::class,
-            \Michielfb\DataMigrations\Console\Commands\MigrateData::class,
-            \Michielfb\DataMigrations\Console\Commands\RollbackMigrateData::class,
+            MakeDataMigrationCommand::class,
+            MigrateDataCommand::class,
+            RollbackMigrateDataCommand::class,
         ]);
     }
 }
