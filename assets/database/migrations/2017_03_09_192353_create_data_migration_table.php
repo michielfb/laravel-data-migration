@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDataMigrationTable extends Migration
 {
@@ -29,7 +30,7 @@ class CreateDataMigrationTable extends Migration
      */
     public function down()
     {
-        if (config('data-migrations.rollback_table')) {
+        if (Config::get('data-migrations.rollback_table')) {
             Schema::dropIfExists('data_migrations');
         }
     }
