@@ -3,7 +3,6 @@
 namespace Michielfb\DataMigrations;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Migrations\Migrator;
 use Michielfb\DataMigrations\Console\Commands\MakeDataMigrationCommand;
 use Michielfb\DataMigrations\Console\Commands\MigrateDataCommand;
 use Michielfb\DataMigrations\Console\Commands\RollbackMigrateDataCommand;
