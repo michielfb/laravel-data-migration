@@ -11,18 +11,42 @@ use Michielfb\DataMigrations\Repositories\DataMigrationRepository;
 class DataMigrationsServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap the application services.
+     * Register services.
      *
      * @return void
      */
-    public function boot()
+    public function register(): void
+    {
+        $this->registerConfig();
+    }
+
+    /**
+     * Boot application..
+     *
+     * @return void
+     */
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
+            $this->publishConfig();
             $this->registerBinds();
-            $this->registerMigrationDirectory();
-            $this->registerConfig();
+            $this->publishDataMigrationDirectory();
+            $this->publishMigrationDirectory();
             $this->registerArtisanCommands();
         }
+    }
+
+    /**
+     * Register config.
+     *
+     * @return void
+     */
+    public function registerConfig(): void
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../assets/config/data-migrations.php',
+            'data-migrations'
+        );
     }
 
     /**
@@ -60,10 +84,22 @@ class DataMigrationsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerMigrationDirectory(): void
+    private function publishDataMigrationDirectory(): void
     {
         $this->publishes([
             __DIR__.'/../assets/data-migrations' => database_path('data-migrations'),
+        ], 'data-migrations');
+    }
+
+    /**
+     * Publish migrations directory.
+     *
+     * @return void
+     */
+    private function publishMigrationDirectory(): void
+    {
+        $this->publishes([
+            __DIR__.'/../assets/database/migrations' => database_path('migrations'),
         ], 'data-migrations');
     }
 
@@ -72,13 +108,19 @@ class DataMigrationsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerConfig(): void
+    private function publishConfig(): void
     {
+
         $this->publishes([
             __DIR__.'/../assets/config/data-migrations.php' => config_path('data-migrations.php'),
         ], 'data-migrations');
     }
 
+    /**
+     * Register artisan commands.
+     *
+     * @return void
+     */
     private function registerArtisanCommands(): void
     {
         $this->commands([
